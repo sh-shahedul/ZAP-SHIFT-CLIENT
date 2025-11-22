@@ -1,9 +1,10 @@
 import React from 'react';
 import { Link } from 'react-router';
 import Logo from '../../../../Component/Logo/Logo';
+import useAuth from '../../../../Hooks/useAuth';
 
 const NavBar = () => {
-
+   const{user,signOutUser} = useAuth()
     const links =<>
     
       <li><Link>Services</Link></li>
@@ -16,6 +17,18 @@ const NavBar = () => {
     
     
     </>
+
+
+
+const handelLogOut =()=>{
+     signOutUser()
+     .then(result=>{
+    console.log(result.user);
+     })
+     .then(error=>{
+      console.log(error)
+     })
+}
     return (
        <div className="navbar bg-base-100 shadow-sm">
   <div className="navbar-start">
@@ -37,8 +50,12 @@ const NavBar = () => {
     </ul>
   </div>
   <div className="navbar-end gap-5">
+
+    {
+      user?  <button onClick={handelLogOut} className="btn">Sign Out</button>:
     <Link to='/login' className="btn">Sign In</Link>
-    <Link to='/register' className="btn">Sign Out</Link>
+    }
+   
   </div>
 </div>
     );
