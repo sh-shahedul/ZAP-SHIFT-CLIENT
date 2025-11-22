@@ -1,4 +1,5 @@
 import React from "react";
+import { motion } from "framer-motion";
 
 import amazon from "../../../assets/brands/amazon.png";
 import amazon_vector from "../../../assets/brands/amazon_vector.png";
@@ -20,14 +21,23 @@ const brandLogo = [
 
 const Brands = () => {
   return (
-    <div className="w-full py-10  overflow-hidden">
+    <div className="w-full py-10 overflow-hidden">
       <h2 className="text-3xl font-bold text-center mb-10">
         We've helped thousands of seals teams
       </h2>
 
       <div className="relative w-full overflow-hidden">
-        {/* Wrapper with duplicated logos */}
-        <div className="flex animate-scroll gap-10">
+        <motion.div
+          className="flex gap-10"
+          animate={{ x: ["0%", "-50%"] }}
+          transition={{
+            repeat: Infinity,
+            repeatType: "loop",
+            duration: 20,
+            ease: "linear",
+          }}
+        >
+          {/* Duplicate logos for seamless scroll */}
           {[...brandLogo, ...brandLogo].map((logo, index) => (
             <div
               key={index}
@@ -40,23 +50,11 @@ const Brands = () => {
               />
             </div>
           ))}
-        </div>
+        </motion.div>
       </div>
-
-      {/* Tailwind animation */}
-      <style jsx>{`
-        @keyframes scroll {
-          0% { transform: translateX(0); }
-          100% { transform: translateX(-50%); }
-        }
-        .animate-scroll {
-          display: flex;
-          width: max-content;
-          animation: scroll 20s linear infinite;
-        }
-      `}</style>
-    </div>
+     </div>
   );
 };
 
 export default Brands;
+

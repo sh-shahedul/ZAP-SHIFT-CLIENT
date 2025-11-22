@@ -7,8 +7,8 @@ const NavBar = () => {
     const links =<>
     
       <li><Link>Services</Link></li>
-      <li><Link>Coverage</Link></li>
-      <li><Link>About Us</Link></li>
+      <li><Link to='/covarege'>Coverage</Link></li>
+      <li><Link to='/about'>About Us</Link></li>
       <li><Link>Pricing</Link></li>
       <li><Link>Blog</Link></li>
       <li><Link>Contact</Link></li>
@@ -37,8 +37,8 @@ const NavBar = () => {
     </ul>
   </div>
   <div className="navbar-end gap-5">
-    <a className="btn">Sign In</a>
-    <a className="btn">Sign Out</a>
+    <Link to='/login' className="btn">Sign In</Link>
+    <Link to='/register' className="btn">Sign Out</Link>
   </div>
 </div>
     );

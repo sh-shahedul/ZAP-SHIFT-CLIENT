@@ -6,7 +6,7 @@ const CustomerSetisfection = () => {
   return (
     <div className="relative bg-secondary p-6 sm:p-10 md:pt-16 sm:pt-20 rounded-xl overflow-hidden mb-20">
 
-      {/* Background images — visible only on desktop */}
+      
       <div
         className="hidden lg:block absolute inset-0"
         style={{
