@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router';
+import { Link, NavLink } from 'react-router';
 import Logo from '../../../../Component/Logo/Logo';
 import useAuth from '../../../../Hooks/useAuth';
 
@@ -7,13 +7,13 @@ const NavBar = () => {
    const{user,signOutUser} = useAuth()
     const links =<>
     
-      <li><Link>Services</Link></li>
-      <li><Link to='/covarege'>Coverage</Link></li>
-      <li><Link to='/about'>About Us</Link></li>
-      <li><Link>Pricing</Link></li>
-      <li><Link>Blog</Link></li>
-      <li><Link>Contact</Link></li>
-    
+ <li><NavLink to="/" className={({isActive}) => isActive ? "bg-lime-300 text-black px-3 py-2 rounded-full" : ""}>Services</NavLink></li>
+<li><NavLink to="/covarege" className={({isActive}) => isActive ? "bg-lime-300 text-black px-3 py-2 rounded-full" : ""}>Coverage</NavLink></li>
+<li><NavLink to="/about" className={({isActive}) => isActive ? "bg-lime-300 text-black px-3 py-2 rounded-full" : ""}>About Us</NavLink></li>
+<li><NavLink to="/pricing" className={({isActive}) => isActive ? "bg-lime-300 text-black px-3 py-2 rounded-full" : ""}>Pricing</NavLink></li>
+<li><NavLink to="/sendParcel" className={({isActive}) => isActive ? "bg-lime-300 text-black px-3 py-2 rounded-full" : ""}>Send Parcel</NavLink></li>
+<li><NavLink to="/contact" className={({isActive}) => isActive ? "bg-lime-300 text-black px-3 py-2 rounded-full" : ""}>Contact</NavLink></li>
+
     
     
     </>
@@ -42,7 +42,7 @@ const handelLogOut =()=>{
         {links}
       </ul>
     </div>
-    <a className="btn btn-ghost text-xl"><Logo></Logo></a>
+    <Logo></Logo>
   </div>
   <div className="navbar-center hidden lg:flex">
     <ul className="menu menu-horizontal px-1">
@@ -56,6 +56,7 @@ const handelLogOut =()=>{
     <Link to='/login' className="btn">Sign In</Link>
     }
    
+   <Link to='/rider' className=' btn btn-primary text-black font-bold'>Be a Rider</Link>
   </div>
 </div>
     );

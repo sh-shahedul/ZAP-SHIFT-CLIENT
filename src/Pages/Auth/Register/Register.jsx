@@ -1,27 +1,55 @@
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { FcGoogle } from 'react-icons/fc';
 import { PiEyeFill } from 'react-icons/pi';
 import { TbEyeClosed } from 'react-icons/tb';
-import { Link } from 'react-router'; 
+import { Link, useLocation, useNavigate } from 'react-router'; 
 import useAuth from '../../../Hooks/useAuth';
 import SocialLogin from '../SocialLogIn/SocialLogin';
+import axios from 'axios';
 
 const Register = () => {
   const { register, handleSubmit, formState: { errors } } = useForm();
   const [showPass, setShowPass] = useState(false);
-  
+   const location = useLocation()
+   console.log(location,'in register')
+   const navigate = useNavigate()
 
-   const {registerUser} = useAuth()
+   const {registerUser,updateUserProfile} = useAuth()
+     
+
   const handelRegistration = (data) => {
-    console.log(data, 'Registration Data');
+    console.log(data.photo[0], 'after regiseter');
+    const profileImg = data.photo[0]
     registerUser(data.email,data.password)
     .then(result=>{
         console.log(result.user)
+          const formData = new FormData()
+     formData.append('image',profileImg)
+
+   const image_Api_url = `https://api.imgbb.com/1/upload?key=${import.meta.env.VITE_IMAGE_HOST_KEY}`
+   axios.post(image_Api_url,formData)
+   .then(res=>{
+      console.log('after image upload',res.data.data.url);
+      const userProfile = {
+       displayName : data.name,
+       photoURL : res.data.data.url
+      }
+      updateUserProfile(userProfile)
+      .then(res=>{
+        console.log(res.user)
+      })
+      .catch(error =>{
+        console.log(error)
+      })
+   })
     })
-    .then(error=>{
+    .catch(error=>{
         console.log(error)
     })
+   
+   
+
+
   };
 
   return (
@@ -46,16 +74,20 @@ const Register = () => {
           {errors.name?.type === 'required' && <p className="text-red-600 text-sm mt-1">Name is Required</p>}
           {errors.name?.type === 'minLength' && <p className="text-red-600 text-sm mt-1">Name must be at least 3 characters</p>}
         </div>
-
+        {/* Photo  */}
         <div className="mb-4">
-            <label className="block font-medium mb-1">Photo URL</label>
-            <input
-            type="text"
-            {...register('photoURL')}
-            className="w-full p-2  border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-lime-300"
-            placeholder="Photo URL"
+          <label className="block font-medium mb-1">Photo</label>
+          
+          <input
+            type="file"
+            {...register('photo', { required: true })}
+            className=" file-input w-full   border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-lime-300"
+            placeholder="Your Name"
           />
+          {errors.photo?.type === 'required' && <p className="text-red-600 text-sm mt-1">Photo is Required</p>}
+          
         </div>
+
 
         {/* EMAIL FIELD */}
         <div className="mb-4">
@@ -115,7 +147,7 @@ const Register = () => {
         {/* LOGIN LINK */}
         <p className="mt-3 text-center text-sm">
           Already have an account?{" "}
-          <Link to='/login' className="text-lime-500 font-bold hover:underline">
+          <Link state={location.state} to='/login' className="text-lime-500 font-bold hover:underline">
             Login
           </Link>
         </p>

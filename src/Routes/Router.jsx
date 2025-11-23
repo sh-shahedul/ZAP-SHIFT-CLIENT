@@ -9,6 +9,9 @@ import ErrorPage from "../Pages/Home/AboutUs/Error/ErrorPage";
 import AuthLayout from "../LayOuts/AuthLayout";
 import Login from "../Pages/Auth/Login/Login";
 import Register from "../Pages/Auth/Register/Register";
+import PrivateRoute from "./privateRoute";
+import Rider from "../Pages/Rider/Rider";
+import SendParcel from "../Pages/SendParcel/SendParcel";
 
 
 
@@ -22,6 +25,15 @@ export const router = createBrowserRouter([
       {
         index:true,
         Component:Home,
+      },
+      {
+         path:'rider',
+         element:<PrivateRoute><Rider></Rider></PrivateRoute>,
+      },
+      {
+          path:'sendParcel',
+          element:<PrivateRoute><SendParcel></SendParcel></PrivateRoute>,
+          loader: ()=>fetch('/serviceCenter.json').then(res=>res.json())
       },
       {
         path:'covarege',

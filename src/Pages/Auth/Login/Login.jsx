@@ -1,13 +1,16 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import { FcGoogle } from 'react-icons/fc';
-import { Link } from 'react-router';
+import { Link, useLocation, useNavigate } from 'react-router';
 import useAuth from '../../../Hooks/useAuth';
 import SocialLogin from '../SocialLogIn/SocialLogin';
 
 const Login = () => {
     const {register, handleSubmit,formState:{errors}} = useForm()
    const {signInUser}=useAuth()
+     const navigate = useNavigate()
+   const location = useLocation()
+   console.log('in the log in page',location)
 
 
 
@@ -16,8 +19,9 @@ const Login = () => {
        signInUser(data.email,data.password)
        .then(result =>{
         console.log(result.user)
+         navigate(location.state|| '/')
        })
-       .then(error=>{
+       .catch(error=>{
         console.log(error)
        })
     }
@@ -60,7 +64,7 @@ const Login = () => {
 
             <p className=" font-medium text-gray-600 text-sm">
               New to Zap shift?{" "}
-              <Link to='/register' className="text-lime-500 font-bold hover:underline">
+              <Link state={location.state} to='/register' className="text-lime-500 font-bold hover:underline">
                 Register
               </Link>
             </p>
