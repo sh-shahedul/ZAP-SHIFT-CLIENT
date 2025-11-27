@@ -3,10 +3,14 @@ import { useForm, useWatch } from 'react-hook-form';
 import Register from '../Auth/Register/Register';
 import { useLoaderData } from 'react-router';
 import Swal from 'sweetalert2';
+import useAxiosSecure from '../../Hooks/useAxiosSecure';
+import useAuth from '../../Hooks/useAuth';
 
 const SendParcel = () => {
     const {register,handleSubmit,control} = useForm()
+    const axiosSecure = useAxiosSecure();
     const  serviceCenters = useLoaderData()
+    const {user} = useAuth()
     console.log(serviceCenters)
     const duplicateRegions = serviceCenters.map(c=>c.region)
     const regions = [...new Set(duplicateRegions)]
@@ -46,7 +50,7 @@ const SendParcel = () => {
             
          }
       }
-
+        data.cost = cost
 
      console.log(cost ,'cost')
 
@@ -61,11 +65,23 @@ const SendParcel = () => {
   confirmButtonText: "Yes, take it!"
      }).then((result) => {
   if (result.isConfirmed) {
-    // Swal.fire({
-    //   title: "Deleted!",
-    //   text: "Your file has been deleted.",
-    //   icon: "success"
-    // });
+
+     axiosSecure.post('/parcels',data)
+     .then(result =>{
+        console.log('after saving',result.data)
+     })
+     .catch(error=>{
+        console.log(error)
+     })
+    
+    Swal.fire({
+      title: "Successed!",
+      text: "tour paecel has been success",
+      icon: "success"
+    });
+    
+
+
 
   }
 });
@@ -89,11 +105,11 @@ const SendParcel = () => {
        <div className='grid grid-cols-1 md:grid-cols-2 md:gap-12'>
          <fieldset className="fieldset">
           <label className="label text-black font-bold ml-2">Parcel Name</label>
-          <input type="text" {...register('parcelName')}  className="w-full p-2 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-lime-300 pr-10" placeholder="Parcel Name" />
+          <input type="text" {...register('parcelName')}  className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-lime-300 pr-10" placeholder="Parcel Name" />
         </fieldset>
          <fieldset className="fieldset">
           <label className="label text-black font-bold ml-2">Parcel Weight (Kg)</label>
-          <input type="number" {...register('parcelWeight')} className="w-full p-2 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-lime-300 pr-10" placeholder="Parcel Weight" />
+          <input type="number" {...register('parcelWeight')} className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-lime-300 pr-10" placeholder="Parcel Weight" />
         </fieldset>
        </div>
          <hr className='my-5 text-gray-300' />
@@ -105,15 +121,15 @@ const SendParcel = () => {
               <h2 className='text-2xl font-semibold'>Sender Details</h2>
               {/* name  */}
           <label className="label text-black font-bold ml-2">Sender Name</label>
-          <input type="text" {...register('senderName')}  className=" w-full p-2 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-lime-300 pr-10" placeholder="Sender Name" />
+          <input type="text" {...register('senderName')} defaultValue={user?.displayName}  className=" w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-lime-300 pr-10" placeholder="Sender Name" />
           {/* email  */}
           <label className="label text-black font-bold ml-2">Sender Email</label>
-          <input type="email" {...register('senderEmail')}  className=" w-full p-2 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-lime-300 pr-10" placeholder="Sender Email" />
+          <input type="email" {...register('senderEmail')}  className=" w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-lime-300 pr-10 " defaultValue={user?.email} placeholder="Sender Email" />
           {/* select region  */}
 
                 <fieldset className="fieldset">
                 <legend className="fieldset-legend">Sender Region</legend>
-                <select  {...register('senderRegion')} defaultValue="Pick a Region" className="select  w-full rounded-full focus:outline-none focus:ring-2 focus:ring-lime-300">
+                <select  {...register('senderRegion')} defaultValue="Pick a Region" className="select  w-full rounded-lg focus:outline-none focus:ring-2 focus:ring-lime-300">
                   <option disabled={true}>Pick a Region</option>
                   {
                     regions.map((region,i)=> <option  key={i} value={region}>{region}</option>  )
@@ -128,7 +144,7 @@ const SendParcel = () => {
 
                 <fieldset className="fieldset">
                 <legend className="fieldset-legend">Sender Districts</legend>
-                <select  {...register('senderDistrict')} defaultValue="Pick a District" className="select  w-full rounded-full focus:outline-none focus:ring-2 focus:ring-lime-300">
+                <select  {...register('senderDistrict')} defaultValue="Pick a District" className="select  w-full rounded-lg focus:outline-none focus:ring-2 focus:ring-lime-300">
                   <option disabled={true}>Pick a District</option>
                   {
                     districtsByRegion(senderRegion).map((region,i)=> <option  key={i} value={region}>{region}</option>)
@@ -142,14 +158,14 @@ const SendParcel = () => {
           
            {/* address  */}
           <label className="label text-black font-bold ml-2">Sender Address</label>
-          <input type="text" {...register('senderAddress')}  className="w-full p-2 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-lime-300 pr-10" placeholder="Sender Address" />
+          <input type="text" {...register('senderAddress')}  className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-lime-300 pr-10" placeholder="Sender Address" />
           {/* phone  */}
           <label className="label text-black font-bold ml-2">Sender Phone No </label>
-          <input type="number" {...register('senderPhoneNo')} className="w-full p-2 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-lime-300 pr-10" placeholder="Sender Phone No" />
+          <input type="number" {...register('senderPhoneNo')} className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-lime-300 pr-10" placeholder="Sender Phone No" />
          
           {/* pickup inst.  */}
           <label className="label text-black font-bold ml-2">Pickup Instruction </label>
-          <textarea type="text" {...register('pickup-Instraction')} className=" textarea w-full p-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-lime-300 pr-10" placeholder="  Pickup Instruction" />
+          <textarea type="text" {...register('pickup-Instraction')} className=" textarea w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-lime-300 pr-10" placeholder="  Pickup Instruction" />
         </fieldset>
             {/* reciver details  */}
             
@@ -158,16 +174,16 @@ const SendParcel = () => {
              <h2 className='text-2xl font-semibold'>Reciver Details</h2>
              {/* name  */}
           <label className="label text-black font-bold ml-2">Reciver Name</label>
-          <input type="text" {...register('reciverName')}  className="w-full p-2 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-lime-300 pr-10" placeholder="Reciver Name" />
+          <input type="text" {...register('reciverName')}  className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-lime-300 pr-10" placeholder="Reciver Name" />
            {/* email  */}
           <label className="label text-black font-bold ml-2">Reciver Email</label>
-          <input type="email" {...register('reciverEmail')}  className=" w-full p-2 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-lime-300 pr-10" placeholder="Reciver Email" />
+          <input type="email" {...register('reciverEmail')}  className=" w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-lime-300 pr-10" placeholder="Reciver Email" />
             
                {/* select region  */}
 
                 <fieldset className="fieldset">
                 <legend className="fieldset-legend">Reciver Region</legend>
-                <select  {...register('reciverRegion')} defaultValue="Pick a Region" className="select  w-full rounded-full focus:outline-none focus:ring-2 focus:ring-lime-300">
+                <select  {...register('reciverRegion')} defaultValue="Pick a Region" className="select  w-full rounded-lg focus:outline-none focus:ring-2 focus:ring-lime-300">
                   <option disabled={true}>Pick a Region</option>
                   {
                     regions.map((region,i)=> <option  key={i} value={region}>{region}</option>)
@@ -182,7 +198,7 @@ const SendParcel = () => {
 
                 <fieldset className="fieldset">
                 <legend className="fieldset-legend">Reciver Districts</legend>
-                <select  {...register('reciverDistrict')} defaultValue="Pick a District" className="select  w-full rounded-full focus:outline-none focus:ring-2 focus:ring-lime-300">
+                <select  {...register('reciverDistrict')} defaultValue="Pick a District" className="select  w-full rounded-lg focus:outline-none focus:ring-2 focus:ring-lime-300">
                   <option disabled={true}>Pick a District</option>
                   {
                     districtsByRegion(reciverRegion).map((region,i)=> <option  key={i} value={region}>{region}</option>)
@@ -194,14 +210,14 @@ const SendParcel = () => {
               </fieldset>
           {/* address  */}
           <label className="label text-black font-bold ml-2">Reciver Address</label>
-          <input type="text" {...register('reciverAddress')}  className="w-full p-2 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-lime-300 pr-10" placeholder="Reciver Address" />
+          <input type="text" {...register('reciverAddress')}  className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-lime-300 pr-10" placeholder="Reciver Address" />
           {/* phone  */}
           <label className="label text-black font-bold ml-2">Reciver Phone No </label>
-          <input type="number" {...register('reciverPhoneNo')} className="w-full p-2 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-lime-300 pr-10" placeholder="Reciver Phone No" />
+          <input type="number" {...register('reciverPhoneNo')} className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-lime-300 pr-10" placeholder="Reciver Phone No" />
          
           {/* delever inst  */}
           <label className="label text-black font-bold ml-2">Delivery Instruction </label>
-          <textarea type="text" {...register('delivery-Instraction')} className=" textarea w-full p-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-lime-300 pr-10" placeholder="  Delivery Instruction" />
+          <textarea type="text" {...register('delivery-Instraction')} className=" textarea w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-lime-300 pr-10" placeholder="  Delivery Instruction" />
         </fieldset>
         </div>
         <h3 className=' text-lg font-bold mt-7'> * PickUp Time-4pm-7pm  Approx.</h3>

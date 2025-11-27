@@ -1,67 +1,85 @@
+'use client';
 import React, { useEffect, useState } from 'react';
+import { createUserWithEmailAndPassword, GoogleAuthProvider, onAuthStateChanged, sendEmailVerification, sendPasswordResetEmail, signInWithEmailAndPassword, signInWithPopup, signOut, updateProfile } from 'firebase/auth';
 import { AuthContext } from './AuthContext';
-import { createUserWithEmailAndPassword, GoogleAuthProvider, onAuthStateChanged, signInWithEmailAndPassword, signInWithPopup, signOut, updateProfile } from 'firebase/auth';
 import { auth } from '../../firebase/firebase.init';
-const googleProvider = new GoogleAuthProvider();
-
 
 const AuthProvider = ({children}) => {
-   const [user,setUser]= useState(null)
-   const[loading,setLoading] =useState(true)
+    const [user, setUser] = useState(null);
+    const [loading, setLoading] = useState(true)
 
+    const googleProvider = new GoogleAuthProvider();
 
-  const registerUser = (email ,password)=>{
-    return createUserWithEmailAndPassword(auth,email ,password)
-  }
+    // Create User With Email & Password
+    const createUser = (email, password) => {
+        setLoading(true)
+        return createUserWithEmailAndPassword(auth, email, password)
+    }
 
-  const signInUser = (email ,password)=>{
-    return signInWithEmailAndPassword(auth,email ,password)
-  }
-  const googleSignIn = ()=>{
-       return signInWithPopup(auth,googleProvider)
-  }
+    // Sign-In With Email & Password 
+    const signInUser = (email, password) => {
+        setLoading(true)
+        return signInWithEmailAndPassword(auth, email, password);
+    }
 
-  const signOutUser  =  ()=>{
-    return  signOut(auth)
-  }
+    // Google Sign-In
+    const googleSignIn = () => {
+        setLoading(true)
+        return signInWithPopup(auth, googleProvider);
+    }
 
-  const updateUserProfile = (profile)=>{
-    return updateProfile(auth.currentUser,profile)
-  }
+    // Update Profile
+    const updateUserProfile = (displayName, photoURL) => {
+        // setLoading(true) 
+        return updateProfile(auth.currentUser, { displayName, photoURL })
+    }
 
-  useEffect(()=>{
-      const unSubscribe = onAuthStateChanged(auth,currentUser=>{
-        console.log('current user in  Auth ',currentUser)
-        setUser(currentUser)
-        setLoading(false)
-      })
-      return ()=>{
-        unSubscribe()
-      }
+    // Verification Email
+    const verificationEmail = () => {
+        setLoading(true);
+        return sendEmailVerification()
+    }
 
-  },[])
+    // Forget Password
+    const forgetPassword = (email) => {
+        setLoading(true)
+        return sendPasswordResetEmail(auth, email)
+    }
 
+    // Sign-Out User
+    const signOutUser = () => {
+        setLoading(true)
+        return signOut(auth)
+    }
 
+    // On Auth State Changed
+      useEffect(() => {
+        const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+            setUser(currentUser)
+            setLoading(false)
+        })
+        return () => {
+            unsubscribe();
+        }
+    }, [])
 
+    const authInfo = {
+        user,
+        setUser,
+        createUser,
+        signInUser,
+        signOutUser,
+        googleSignIn,
+        updateUserProfile,
+        verificationEmail,
+        forgetPassword,
+        loading,
+    }
 
-
-    const authInfo ={
-            registerUser,
-            signInUser,
-            googleSignIn,
-            signOutUser,
-            updateUserProfile,
-            user,
-            loading,
-          }
     return (
-
-          
-      
-          <AuthContext value={authInfo}>
+        <AuthContext value={authInfo}>
             {children}
-          </AuthContext>
-      
+        </AuthContext>
     );
 };
 

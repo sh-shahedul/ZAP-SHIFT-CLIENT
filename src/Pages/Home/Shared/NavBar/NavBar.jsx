@@ -14,7 +14,12 @@ const NavBar = () => {
 <li><NavLink to="/sendParcel" className={({isActive}) => isActive ? "bg-lime-300 text-black px-3 py-2 rounded-full" : ""}>Send Parcel</NavLink></li>
 <li><NavLink to="/contact" className={({isActive}) => isActive ? "bg-lime-300 text-black px-3 py-2 rounded-full" : ""}>Contact</NavLink></li>
 
-    
+     {
+      user && <>
+      <li><NavLink to="/dashbord/my-parcels" className={({isActive}) => isActive ? "bg-lime-300 text-black px-3 py-2 rounded-full" : ""}>My Parcel</NavLink></li>
+      
+      </>
+     }
     
     </>
 
