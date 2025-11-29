@@ -4,6 +4,7 @@ import Logo from '../Component/Logo/Logo';
 import { TbTruckDelivery } from 'react-icons/tb';
 import { FaHome } from 'react-icons/fa';
 import { RiExchangeBoxFill } from 'react-icons/ri';
+import { MdWorkHistory } from 'react-icons/md';
 
 const DashbordLayOut = () => {
     return (
@@ -46,6 +47,13 @@ const DashbordLayOut = () => {
             {/* parecle icon */}
             <TbTruckDelivery size={20} />
             <span className="is-drawer-close:hidden">My Parcels</span>
+          </NavLink>
+        </li>
+        <li>
+          <NavLink to='/dashbord/payment-history' className="is-drawer-close:tooltip is-drawer-close:tooltip-right"   data-tip="payment-history">
+            {/* parecle icon */}
+            <MdWorkHistory size={20} />
+            <span className="is-drawer-close:hidden">payment-history</span>
           </NavLink>
         </li>
         <li>

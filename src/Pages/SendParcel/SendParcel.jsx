@@ -10,9 +10,9 @@ const SendParcel = () => {
     const {register,handleSubmit,control} = useForm()
     const axiosSecure = useAxiosSecure();
     const  serviceCenters = useLoaderData()
-    const navigate = useNavigate()
     const {user} = useAuth()
-    console.log(serviceCenters)
+    const navigate = useNavigate()
+    // console.log(serviceCenters)
     const duplicateRegions = serviceCenters.map(c=>c.region)
     const regions = [...new Set(duplicateRegions)]
     console.log(regions)
