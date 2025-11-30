@@ -3,7 +3,7 @@ import { Link, NavLink, Outlet } from 'react-router';
 import Logo from '../Component/Logo/Logo';
 import { TbTruckDelivery } from 'react-icons/tb';
 import { FaHome } from 'react-icons/fa';
-import { RiExchangeBoxFill } from 'react-icons/ri';
+import { RiEBike2Fill, RiExchangeBoxFill } from 'react-icons/ri';
 import { MdWorkHistory } from 'react-icons/md';
 
 const DashbordLayOut = () => {
@@ -54,6 +54,13 @@ const DashbordLayOut = () => {
             {/* parecle icon */}
             <MdWorkHistory size={20} />
             <span className="is-drawer-close:hidden">payment-history</span>
+          </NavLink>
+        </li>
+        <li>
+          <NavLink to='/dashbord/approve-riders' className="is-drawer-close:tooltip is-drawer-close:tooltip-right"   data-tip="Approve Riders">
+            {/* parecle icon */}
+          <RiEBike2Fill size={20} />
+            <span className="is-drawer-close:hidden">Approve Riders</span>
           </NavLink>
         </li>
         <li>
