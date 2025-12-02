@@ -5,8 +5,12 @@ import { TbTruckDelivery } from 'react-icons/tb';
 import { FaHome } from 'react-icons/fa';
 import { RiEBike2Fill, RiExchangeBoxFill } from 'react-icons/ri';
 import { MdWorkHistory } from 'react-icons/md';
+import { FaUserLarge } from 'react-icons/fa6';
+import useRole from '../Hooks/useRole';
 
 const DashbordLayOut = () => {
+  const {role} = useRole()
+ 
     return (
         <div className="drawer lg:drawer-open max-w-screen-2xl mx-auto bg-base-200">
   <input id="my-drawer-4" type="checkbox" className="drawer-toggle" />
@@ -56,13 +60,25 @@ const DashbordLayOut = () => {
             <span className="is-drawer-close:hidden">payment-history</span>
           </NavLink>
         </li>
-        <li>
+       {
+        role === 'admin' && <>
+         <li>
           <NavLink to='/dashbord/approve-riders' className="is-drawer-close:tooltip is-drawer-close:tooltip-right"   data-tip="Approve Riders">
             {/* parecle icon */}
           <RiEBike2Fill size={20} />
             <span className="is-drawer-close:hidden">Approve Riders</span>
           </NavLink>
         </li>
+        <li>
+          <NavLink to='/dashbord/user-management' className="is-drawer-close:tooltip is-drawer-close:tooltip-right"   data-tip="User Management">
+            {/* parecle icon */}
+          <FaUserLarge size={20} />
+            <span className="is-drawer-close:hidden">User Management</span>
+          </NavLink>
+        </li>
+        
+        </>
+       }
         <li>
           <button className="is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="Settings">
             {/* Settings icon */}
